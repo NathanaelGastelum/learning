@@ -3,7 +3,7 @@
 #include <time.h>
 
 char *action, *activity;
-time_t startTime;
+time_t startTime, currentTime;
 
 // Define availible activities (struct/enum? - see #define keyword) 
 
@@ -23,14 +23,24 @@ int main(int argc, char *argv[])
     }
 
     // Get elapsed time
-    // add startTime check once data is logged to file: && startTime != (time_t) NULL
     if(strcmp(action, "stop") == 0)
     {
-        double elapsedTime = difftime(time(NULL), startTime);
-        printf("%d spent on %s\n", elapsedTime, activity);
+        // add startTime check once data is logged to file: && startTime != (time_t) NULL
+        // enable user to enter elapsed time, to handle cases where start doesn't exist
+
+        currentTime = time(NULL); //TODO: figure out why currentTime getting set to 0
+        double elapsedTime = difftime(currentTime, startTime);
+        printf("%f spent on %s\n", elapsedTime, activity);
+
+        // Store elapsed time to a csv logfile
+        FILE *fp = fopen("timeLog.csv", "a"); // TODO: add new csv column headers if file doesn't exist 
+        fprintf(fp, "%d,%s,%f\n", startTime, activity, elapsedTime);
+        fclose(fp);
     }
 
-    // Store elapsed time to a csv logfile
-    
+    // convert time to be more readable
+
     // Get today's status
+
+    // Enable removing/editing lines in csv file
 }
